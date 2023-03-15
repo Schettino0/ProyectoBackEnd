@@ -7,13 +7,17 @@ const router = Router()
 
 
 
-router.post('/',  (req, res) => {
+router.post('/', async (req, res) => {
     const product = req.body
-    // const id = await tienda.getProducts()
-    // product.id = id.length + 1
     const { title, description, price, thumdnail, code, stock, status= true } = product
-    tienda.addProduct({title, description, price, thumdnail, code, stock,status})
-    res.status(201).json({ messagge: "Producto agreado con Exito!" })
+    const añadir = await tienda.addProduct({ title, description, price, thumdnail, code, stock }) 
+    console.log(añadir);
+    if(añadir === "Creado con exito"){
+        res.status(201).json({message: añadir})
+    }
+    else{
+        res.status(400).json({error: añadir})
+    }
 })
 
 

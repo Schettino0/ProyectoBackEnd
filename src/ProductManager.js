@@ -20,6 +20,7 @@ class ProductManager {
 
         if (productos.find(element => element.code === code)) { //Verifico que no exista producto con un code igual al code ingresado.
             console.log(`Codigo ya en uso! : ${code}`)
+            return "Codigo ya en uso"
         }
         else {
             if (title && description && price && thumdnail && code && stock) {
@@ -29,9 +30,11 @@ class ProductManager {
                 const producto = { id, title, description, price, thumdnail, code, stock, status: true }
                 productos.push(producto)
                 fs.promises.writeFile(this.path, JSON.stringify(productos))
+                return "Creado con exito"
                 
             } else {
                 console.log("Faltan datos!")
+                return "Faltan datos"
             }
         }
     }
