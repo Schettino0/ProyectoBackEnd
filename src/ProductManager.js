@@ -14,7 +14,7 @@ class ProductManager {
         return dataObj
     }
 
-    async addProduct({ title, description, price, thumdnail, code, stock }) {
+    async addProduct({ title, description, price, thumbnail, code, stock }) {
         const productos = await this.getProducts()
         let id = productos.length + 1
 
@@ -23,11 +23,12 @@ class ProductManager {
             return "Codigo ya en uso"
         }
         else {
-            if (title && description && price && thumdnail && code && stock) {
+            // console.log(title, description, price, thumbnail, code, stock)
+            if (title && description && price && thumbnail && code && stock) {
                 if(productos.find(el => el.id === id)){ // Verifico que no se repita el ID al crear un producto nuevo.
                     id++
                 }
-                const producto = { id, title, description, price, thumdnail, code, stock, status: true }
+                const producto = { id, title, description, price, thumbnail, code, stock, status: true }
                 productos.push(producto)
                 fs.promises.writeFile(this.path, JSON.stringify(productos))
                 return "Creado con exito"

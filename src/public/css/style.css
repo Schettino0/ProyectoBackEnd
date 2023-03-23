@@ -1,0 +1,25 @@
+body{
+    background-color: rgb(233, 197, 97);
+}
+
+.product {
+    text-align: center;
+    border: solid 1px;
+	width: auto;
+    background-color: #252525;
+    color: white;
+    border-radius: 15px;
+	width: 15em;
+}
+
+
+.container{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.titulo{
+	text-align: center;
+	
+}
+

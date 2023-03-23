@@ -1,17 +1,16 @@
-
 const ProductManager = require("../ProductManager")
 const tienda = new ProductManager('productos.json')
 const { Router } = require('express')
 
-const router = Router()
 
+const router = Router()
 
 
 router.post('/', async (req, res) => {
     const product = req.body
-    const { title, description, price, thumdnail, code, stock, status= true } = product
-    const añadir = await tienda.addProduct({ title, description, price, thumdnail, code, stock }) 
-    console.log(añadir);
+    console.log(product)
+    const { title, description, price, thumbnail, code, stock, status= true } = product
+    const añadir = await tienda.addProduct({ title, description, price, thumbnail, code, stock }) 
     if(añadir === "Creado con exito"){
         res.status(201).json({message: añadir})
     }
@@ -33,6 +32,7 @@ router.get('/', async (req, res) => {
         res.send({ productos: products })
     }
 })
+
 
 
 router.get('/:pid', async (req, res) => {

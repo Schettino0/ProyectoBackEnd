@@ -1,0 +1,75 @@
+<div class="parent">
+    <div class="div1">
+
+    </div>
+    <div class="div2">
+        <form onsubmit="enviarFormulario(event)">
+            <label for="title">Título:</label><br>
+            <input type="text" id="title" name="title"><br>
+
+            <label for="description">Descripción:</label><br>
+            <textarea id="description" name="description"></textarea><br>
+
+            <label for="price">Precio:</label><br>
+            <input type="number" id="price" name="price" min="0"><br>
+
+            <label for="thumbnail">Miniatura:</label><br>
+            <input type="text" id="thumbnail" name="thumbnail"><br>
+
+            <label for="code">Código:</label><br>
+            <input type="text" id="code" name="code"><br>
+
+            <label for="stock">Stock:</label><br>
+            <input type="number" id="stock" name="stock" min="0"><br>
+
+            <input type="submit" value="Guardar">
+        </form>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+    const socket = io()
+    socket.on('productos', function (productos) {
+        let productosEnLista = document.querySelector('.div1')
+        productosEnLista.innerHTML = " "
+        productos.forEach(function (item) {
+            const boxItem = `   
+            <div class="product">
+                <h4>ID: ${item.id}</h4>
+                <h3>${item.title}</h3>
+                <p>$ ${item.price}</p>
+                <p>Stock: ${item.stock}</p>
+            </div>`
+            productosEnLista.innerHTML += boxItem
+        })
+
+    })
+
+    const enviarFormulario = (event) => {
+        event.preventDefault();
+
+        const formulario = document.querySelector('form');
+        const datosFormulario = new FormData(formulario);
+        const title = datosFormulario.get('title')
+        const description = datosFormulario.get('description')
+        const price = datosFormulario.get('price')
+        const thumbnail = datosFormulario.get('thumbnail')
+        const code = datosFormulario.get('code')
+        const stock = datosFormulario.get('stock')
+        const producto = { title, description, price, thumbnail, code, stock }
+        console.log(producto)
+
+        fetch('/api/products', {
+            method: "POST",
+            body: JSON.stringify(producto),
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+            .then(response => response.json())
+            .then(json => console.log(json));
+        datosFormulario.values = " "
+    }
+
+</script>
