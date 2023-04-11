@@ -16,7 +16,8 @@ body{
     gap: 34px;
 }
 .product{
-    width: 10em;
+    width: 15em;
+    max-height: 12em;
     background-color: #252525;
     text-align: center;
     color: white;

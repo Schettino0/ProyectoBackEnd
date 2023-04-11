@@ -1,6 +1,7 @@
 const cartsController = require('../carts/controller.carts')
 const realtimeproductsController = require('../realtimeproducts/controller.realtimeproducts')
 const productsController = require('../products/controller.products')
+const chatController = require('../chat/controller.chat')
 const ProductManager = require("../dao/ProductManager")
 const Products = require('../dao/models/products.model')
 const tienda = new ProductManager('productos.json')
@@ -10,6 +11,7 @@ const router = app => {
     app.use('/api/carts', cartsController)
     app.use('/api/products', productsController)
     app.use('/realtimeproducts', realtimeproductsController)
+    app.use('/chat', chatController )
 
     app.get('/', async (req, res) => {
 

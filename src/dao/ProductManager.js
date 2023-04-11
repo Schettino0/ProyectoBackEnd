@@ -4,10 +4,10 @@ const fs = require('fs')
 class ProductManager {
     constructor(path) {
         this.products = []
-        this.path = __dirname+"/dao/"+path
+        this.path = __dirname+'/'+path
     }
 
-
+    
     async getProducts() {
         const data = await fs.promises.readFile(this.path, 'utf-8')
         const dataObj = JSON.parse(data)

@@ -18,5 +18,6 @@ const collectionSchema = new mongoose.Schema({
     }
 })
 
+
 const Products = mongoose.model(collectionName, collectionSchema)
 module.exports = Products 

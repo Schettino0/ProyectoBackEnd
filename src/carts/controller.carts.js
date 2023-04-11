@@ -4,6 +4,7 @@ const { Router } = require('express')
 const router = Router()
 const fs = require('fs')
 const Carts = require("../dao/models/carts.model")
+const Products = require("../dao/models/products.model")
 
 let cartArray
 try {
@@ -24,25 +25,29 @@ router.post('/', async (req, res) => {
     //DB 
     const products = []
     await Carts.create({products})
-
-
 })
 
-router.get('/:cid', (req, res) => {
+router.get('/:cid', async (req, res) => {
     const cid = req.params.cid
-    const cartID = cartArray.find(cart => cart.id === parseInt(cid))
-    if (!cartID) {
+    const carts = await Carts.find()
+    const busqueda = carts.find(p => p.id == cid)
+    // const cartID = cartArray.find(cart => cart.id === parseInt(cid))    
+    if (!busqueda) {
         res.status(404).json({ error: "Cart not found" })
     }
     else {
-        res.status(200).json({ message: cartID })
+        res.status(200).json({ message: busqueda })
     }
 })
 
 router.post('/:cid/product/:pid', async (req, res) => {
     const { cid, pid } = req.params
     const productoID = await tienda.getProductById(parseInt(pid))
+    const productos = await Products.find()
+
+    const busqueda = productos.find(p => p.id == pid)
     const cartID = cartArray.find(cart => cart.id === parseInt(cid))
+
     if (!productoID || !cartID) {
         res.status(404).json({ error: " not found" })
     }
@@ -51,13 +56,13 @@ router.post('/:cid/product/:pid', async (req, res) => {
         if (repetido) {
             const index = cartID.products.indexOf(repetido)
             ++cartID.products[index].quantity
-            fs.promises.writeFile('carrito.json', JSON.stringify(cartArray))
+            fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
 
         }
         else {
             const producto = { id: productoID.id, quantity: 1 }
             cartID.products.push(producto)
-            fs.promises.writeFile('carrito.json', JSON.stringify(cartArray))
+            fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
 
         }
         res.status(200).json({ cart: cartID })

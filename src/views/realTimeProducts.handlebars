@@ -36,10 +36,12 @@
         let productosEnLista = document.querySelector('.div1')
         productosEnLista.innerHTML = " "
         productos.forEach(function (item) {
+            console.log(item)
             const boxItem = `   
             <div class="product">
-                <h4>ID: ${item.id}</h4>
+                <h4>ID: ${item._id}</h4>
                 <h3>${item.title}</h3>
+                <p>${item.description} </p>
                 <p>$ ${item.price}</p>
                 <p>Stock: ${item.stock}</p>
             </div>`
