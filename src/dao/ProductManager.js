@@ -4,7 +4,7 @@ const fs = require('fs')
 class ProductManager {
     constructor(path) {
         this.products = []
-        this.path = path
+        this.path = __dirname+"/dao/"+path
     }
 
 

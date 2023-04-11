@@ -1,12 +1,13 @@
-const ProductManager = require("../ProductManager")
+const ProductManager = require("../dao/ProductManager")
 const tienda = new ProductManager('productos.json')
 const { Router } = require('express')
 const router = Router()
 const fs = require('fs')
+const Carts = require("../dao/models/carts.model")
 
 let cartArray
 try {
-    const data = fs.readFileSync('carrito.json', 'utf-8')
+    const data = fs.readFileSync('./src/dao/carrito.json', 'utf-8')
     cartArray = JSON.parse(data)
 }
 catch (error) {
@@ -14,11 +15,16 @@ catch (error) {
 }
 
 router.post('/', async (req, res) => {
+    //FS
     const id = cartArray.length + 1
     const cart = { id, products: [] }
     cartArray.push(cart)
     res.status(201).json({ message: "Carrito creado" })
-    fs.promises.writeFile('carrito.json', JSON.stringify(cartArray))
+    fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
+    //DB 
+    const products = []
+    await Carts.create({products})
+
 
 })
 
