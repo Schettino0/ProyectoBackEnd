@@ -1,25 +1,94 @@
-body{
-    background-color: rgb(233, 197, 97);
+body {
+    background-color: #ECEBE4;
 }
 
 .product {
     text-align: center;
     border: solid 1px;
-	width: auto;
-    background-color: #252525;
+    background-color: #ffffff;
+    border-radius: 30px;
+    width: 16em;
+}
+
+.containerMayor {
+    background-color: #5EA3D4;
+    margin: 0 auto;
+    width: 60%;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.container {
+    gap: 10px 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.titulo {
+    text-align: center;
+
+}
+
+button {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 0.9rem 2rem;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 0.05rem;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 500px;
+    overflow: hidden;
+    background: #66ff66;
+    color: ghostwhite;
+}
+
+button span {
+    position: relative;
+    z-index: 10;
+    transition: color 0.4s;
+}
+
+button:hover span {
+    color: black;
+}
+
+button::before,
+button::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+button::before {
+    content: "";
+    background: #000;
+    width: 120%;
+    left: -10%;
+    transform: skew(30deg);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+button:hover::before {
+    transform: translate3d(100%, 0, 0);
+}
+
+
+.btn-container {
+    padding-top: 30px;
+    text-align: center;
+}
+
+.paginas{
+    font-size: 2em;
     color: white;
-    border-radius: 15px;
-	width: 15em;
 }
-
-
-.container{
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.titulo{
-	text-align: center;
-	
-}
-

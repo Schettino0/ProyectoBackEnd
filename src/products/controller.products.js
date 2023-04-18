@@ -6,6 +6,11 @@ const Products = require("../dao/models/products.model")
 
 const router = Router()
 
+const opciones = {
+    page: 1,
+    limit: 3,
+}
+
 
 router.post('/', async (req, res) => {
     const product = req.body
@@ -33,17 +38,51 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     // res.send({message: "hola"})
-    const { limit } = req.query
-    if (limit) {
-        const productsDB = await Products.find()
-        // const products = await tienda.getProducts()
-        res.send({ productos: productsDB.slice(0, limit) })
+    const { limit = 10, page = 1, sort, query } = req.query
+    const limitValue = Number(limit)
+    const pageValue = Number(page)
+    const opciones = {
+        limit: limitValue,
+        page: pageValue,
+        sort: { price: sort },
+        query: "",
     }
-    else {
-        // const products = await tienda.getProducts()
-        const productsDB = await Products.find()
-        return res.send({ productos: productsDB })
+
+    try {
+        const resultado = await Products.paginate({}, opciones)
+        resultado.status = "success"
+        resultado.nextLink = null
+        resultado.prevLink = null
+        resultado.payload = resultado.docs
+        delete resultado.docs
+    
+        if (resultado.hasPrevPage) {
+            resultado.prevPage = resultado.page - 1
+            resultado.prevLink = `http://localhost:8080/api/products/?limit=${limit}&page=${resultado.prevPage}`
+    
+        }
+        if (resultado.hasNextPage) {
+            resultado.nextPage = resultado.page + 1;
+            resultado.nextLink = `http://localhost:8080/api/products/?limit=${limit}&page=${resultado.nextPage}`
+        }
+        res.json({ resultado })
+    } catch (error) {
+        res.json({status: error})
+        console.log(error)
     }
+
+
+
+    // if (limit) {
+    //     const productsDB = await Products.find()
+    //     // const products = await tienda.getProducts()
+    //     res.send({ productos: productsDB.slice(0, limit) })
+    // }
+    // else {
+    //     // const products = await tienda.getProducts()
+    //     const productsDB = await Products.find()
+    //     return res.send({ productos: productsDB })
+    // }
 })
 
 
@@ -72,14 +111,16 @@ router.put('/:pid', async (req, res) => {
     res.send.json({ message: "Producto Modificado" })
 })
 
+
+
 router.delete('/:pid', async (req, res) => {
     const pid = req.params.pid
     tienda.deleteProduct(parseInt(pid))
     try {
-        await Products.deleteOne({_id: pid})
-        res.send({message : "Eliminado con exito"})
+        await Products.deleteOne({ _id: pid })
+        res.status(200).send({ message: "Eliminado con exito" })
     } catch (error) {
-        res.send({error: error})
+        res.status(400).send({ error: error })
     }
 })
 

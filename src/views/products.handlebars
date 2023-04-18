@@ -1,0 +1,45 @@
+<h1 class="titulo">Productos</h1>
+<div class="containerMayor">
+    <div class="container">
+        {{#each products}}
+        <div class="product">
+            {{!-- <h4>ID: {{this.id}}</h4> --}}
+            <h3>{{this.title}}</h3>
+            <p>Description: {{this.description}}</p>
+            <p>ID: {{this._id}}</p>
+            <p>$ {{this.price}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <button class="boton" style="margin:10px"><span>Add Item +</span></button>
+
+        </div>
+
+        {{/each}}
+    </div>
+    <div class="btn-container">
+        <button class="boton" id="btnPreviewPage"><span>Preview Page</span></button>
+        <span class="paginas">{{opciones.page}} de {{totalPages}}</span>
+        <button class="boton" id="btnNextPage"><span>Next Page</span></button>
+    </div>
+</div>
+
+{{!--
+<script src="js/products.js"></script> --}}
+<script>
+    const limit = {{ opciones.limit }}
+    const totalPages = {{ totalPages }}
+    const page = {{ opciones.page }}
+    const btnNextPage = document.getElementById('btnNextPage')
+    btnNextPage.addEventListener('click', () => {
+        if (page < totalPages) {
+            window.location.href = `http://localhost:8080/products?limit=${limit}&page=${page + 1}`
+        }
+    })
+    const btnPreviewPage = document.getElementById('btnPreviewPage')
+    if (page !== 1)
+        btnPreviewPage.addEventListener('click', () => {
+            window.location.href = `http://localhost:8080/products?limit=${limit}&page=${page - 1}`
+        })
+
+
+
+</script>

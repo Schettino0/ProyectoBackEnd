@@ -6,6 +6,7 @@ const fs = require('fs')
 const Carts = require("../dao/models/carts.model")
 const Products = require("../dao/models/products.model")
 
+
 let cartArray
 try {
     const data = fs.readFileSync('./src/dao/carrito.json', 'utf-8')
@@ -20,11 +21,13 @@ router.post('/', async (req, res) => {
     const id = cartArray.length + 1
     const cart = { id, products: [] }
     cartArray.push(cart)
-    res.status(201).json({ message: "Carrito creado" })
     fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
     //DB 
-    const products = []
-    await Carts.create({products})
+    const info = {
+        products: []
+    }
+    const NewCart = await Carts.create(info)
+    res.json({ message: NewCart })
 })
 
 router.get('/:cid', async (req, res) => {
@@ -40,35 +43,51 @@ router.get('/:cid', async (req, res) => {
     }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.delete('/:cid/products/:pid', async (req, res) => {
     const { cid, pid } = req.params
-    const productoID = await tienda.getProductById(parseInt(pid))
-    const productos = await Products.find()
-
-    const busqueda = productos.find(p => p.id == pid)
-    const cartID = cartArray.find(cart => cart.id === parseInt(cid))
-
-    if (!productoID || !cartID) {
-        res.status(404).json({ error: " not found" })
+    const carrito = await Carts.findOne({ _id: cid })
+    const productos = carrito.products
+    try {
+        const respuesta = await Carts.findByIdAndUpdate({ _id: cid }, { $pull: { products: { product: pid } } })
+        const carrito = await Carts.findOne({ _id: cid })
+        res.json({ carrito })
+    } catch (error) {
+        res.send(error)
+        console.log(error)
     }
-    else {
-        const repetido = cartID.products.find(el => el.id === parseInt(pid))
-        if (repetido) {
-            const index = cartID.products.indexOf(repetido)
-            ++cartID.products[index].quantity
-            fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
+})
 
-        }
-        else {
-            const producto = { id: productoID.id, quantity: 1 }
-            cartID.products.push(producto)
-            fs.promises.writeFile('./src/dao/carrito.json', JSON.stringify(cartArray))
-
-        }
-        res.status(200).json({ cart: cartID })
+router.delete('/:cid', async (req, res) => {
+    const { cid } = req.params
+    try {
+        const carrito = await Carts.findOne({ _id: cid })
+        carrito.set('products',[])
+        const response = await Carts.updateOne({ _id: cid }, carrito)
+        res.send({response})
+    } catch (error) {
+        console.log(error)
+        res.send({error:error})
     }
-
 
 })
+
+
+router.patch('/:cid/product/:pid', async (req, res) => {
+    try {
+        const { cid, pid } = req.params
+        const carrito = await Carts.findOne({ _id: cid })
+        console.log(carrito)
+        carrito.products.push({ product: pid })
+        const response = await Carts.updateOne({ _id: cid }, carrito)
+
+        res.json({ message: response })
+    } catch (error) {
+        console.log(error)
+        res.json({ error })
+    }
+})
+
+
+
 
 module.exports = router
