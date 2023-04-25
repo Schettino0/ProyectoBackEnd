@@ -8,6 +8,7 @@ const router = Router()
 router.get('/', async (req,res)=>{
     // const productos = await tienda.getProducts()
     const productos = await Products.find()
+    
     res.render('realTimeProducts',{productos, style:"css/realTime.css"})
 })
 

@@ -2,18 +2,30 @@ const cartsController = require('../carts/controller.carts')
 const realtimeproductsController = require('../realtimeproducts/controller.realtimeproducts')
 const productsController = require('../products/controller.products')
 const chatController = require('../chat/controller.chat')
+const sessionController = require('../session/controller.session')
 const ProductManager = require("../dao/ProductManager")
 const Products = require('../dao/models/products.model')
 const Carts = require('../dao/models/carts.model')
 const tienda = new ProductManager('productos.json')
-
+const usersController = require('../users/controller.users')
 const router = app => {
 
     app.use('/api/carts', cartsController)
     app.use('/api/products', productsController)
     app.use('/realtimeproducts', realtimeproductsController)
     app.use('/chat', chatController)
+    app.use('/api/sessions', sessionController )
+    app.use('/users', usersController)
+    app.get('/cookies',(req,res)=>{
+        res.cookie('CoderCookie','Esta es una cookie',{maxAge:1000, signed:true}).send('Cookie Creada')
 
+    })
+
+    app.get('/getcookies',(req,res)=>{
+        res.send(req.cookies)
+
+
+    })
 
     //Vista de /products 
 
