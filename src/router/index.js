@@ -16,17 +16,17 @@ const router = app => {
     app.use('/chat', chatController)
     app.use('/api/sessions', sessionController )
     app.use('/users', usersController)
-    app.get('/cookies',(req,res)=>{
-        res.cookie('CoderCookie','Esta es una cookie',{maxAge:1000, signed:true}).send('Cookie Creada')
+    
+    // app.get('/cookies',(req,res)=>{
+    //     res.cookie('CoderCookie','Esta es una cookie',{maxAge:1000, signed:true}).send('Cookie Creada')
 
-    })
+    // })
 
-    app.get('/getcookies',(req,res)=>{
-        res.send(req.cookies)
+    // app.get('/getcookies',(req,res)=>{
+    //     res.send(req.cookies)
 
 
-    })
-
+    // })
     //Vista de /products 
 
     app.get('/products', async (req, res) => {
