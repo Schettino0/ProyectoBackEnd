@@ -2,6 +2,7 @@ body {
     background-color: #ECEBE4;
 }
 
+
 .product {
     text-align: center;
     border: solid 1px;
@@ -88,7 +89,43 @@ button:hover::before {
     text-align: center;
 }
 
-.paginas{
+.paginas {
     font-size: 2em;
     color: white;
+}
+
+.card {
+    background-color: #3b5998;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+    text-align: center;
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.card h2 {
+    margin-top: 0px;
+}
+
+.card p {
+    margin-bottom: 0px;
+    font-size: 18px;
+}
+
+.card .email {
+    font-size: 14px;
+}
+
+a{
+    position: relative;
+    top: 10px;
+    padding: 10px;
+    background-color: red;
+}
+a:hover{
+    background-color: rgb(162, 32, 32);
 }

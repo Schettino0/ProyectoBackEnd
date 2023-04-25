@@ -19,7 +19,7 @@ app.use(session({
     store:MongoStore.create({
         mongoUrl: `mongodb+srv://${dbAdmin}:${dbPassword}@${dbHost}/?retryWrites=true&w=majority`,
         mongoOption: {useNewUrlParser:true, useUnifiedTopology:true},
-        ttl:15,
+        ttl:25,
     }),
     secret: 'secretcoder',
     resave:true,

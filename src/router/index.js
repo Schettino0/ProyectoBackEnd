@@ -8,15 +8,21 @@ const Products = require('../dao/models/products.model')
 const Carts = require('../dao/models/carts.model')
 const tienda = new ProductManager('productos.json')
 const usersController = require('../users/controller.users')
+const viewsTemplateController = require('../viewsTemplate/controller.viewsTemplate')
+const authController = require('../auth/controller.auth')
+const privateAccess = require('../middlewares/privateAccess.middlewares')
+
 const router = app => {
 
+    
+    app.use('/',viewsTemplateController)
     app.use('/api/carts', cartsController)
     app.use('/api/products', productsController)
     app.use('/realtimeproducts', realtimeproductsController)
     app.use('/chat', chatController)
     app.use('/api/sessions', sessionController )
     app.use('/users', usersController)
-    
+    app.use('/auth', authController)
     // app.get('/cookies',(req,res)=>{
     //     res.cookie('CoderCookie','Esta es una cookie',{maxAge:1000, signed:true}).send('Cookie Creada')
 
@@ -30,6 +36,7 @@ const router = app => {
     //Vista de /products 
 
     app.get('/products', async (req, res) => {
+        const { user } = req.session
         const { limit = 10, page = 1, sort, query } = req.query
         const limitValue = Number(limit)
         const pageValue = Number(page)
@@ -44,7 +51,7 @@ const router = app => {
             const totalPages = resultado.totalPages
             let products = resultado.docs
             products = products.map(item => item.toObject())
-            res.render('products', { products, style: "css/style.css ", opciones: opciones, totalPages, sort: req.query.sort })
+            res.render('products', { products, style: "css/style.css ", opciones: opciones, totalPages, sort: req.query.sort , user})
         } catch (error) {
             res.send({ error: error })
             console.log(error)

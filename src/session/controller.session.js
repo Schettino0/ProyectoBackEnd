@@ -30,9 +30,7 @@ router.get('/login' , (req,res)=>{
     res.send('login success!')
 })
 
-router.get('/register',(req,res)=>{
-    res.render('signup', { style : "../../css/register.css"})
-})
+
 
 router.get('/logout', (req,res)=>{
     req.session.destroy(err=>{
