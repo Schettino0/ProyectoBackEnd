@@ -1,8 +1,9 @@
 const form = document.getElementById('loginForm')
+const mensaje = document.getElementById('mensaje')
 
 form.addEventListener('submit', e => {
     e.preventDefault()
-
+    mensaje.innerText =  ""
     const data = new FormData(form)
     const obj = {}
     data.forEach((value, key) => obj[key] = value)
@@ -23,8 +24,8 @@ form.addEventListener('submit', e => {
         .then(data => {
             if (data.status !== "error") {
                 window.location.href = 'http://localhost:8080/products'
-}
-console.log(data)
+            }
+            mensaje.innerText = data.error || "Sesion Iniciada!"
         })
-    .catch(error => console.log(error))
+        .catch(error => console.log(error))
 })

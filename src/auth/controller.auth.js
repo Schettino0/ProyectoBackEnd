@@ -1,49 +1,32 @@
 const { Router } = require('express')
 const Users = require('../dao/models/users.model')
+const { isValidPassword } = require('../utils/cryptPassword.utils')
+const passport = require('passport')
 
 const router = Router()
 
-router.post('/', async (req, res) => {
+router.post('/', passport.authenticate('login'),
+    async (req, res) => {
+        try {
 
-    try {
-        const { email, password } = req.body
-        const user = await Users.findOne({ email: email })
-        console.log(user)
-        if (!user) return res.status(400).json({
-            status: 'error',
-            error: 'el usuario y la contraseña no coinciden.'
-        })
+            if (!req.user) {
+                return res.status(401).json({ status: 'error', error: "Usuario y contraseña no coinciden" })
+            }
 
-        if (user.password !== password) return res.status(400).json({
-            status: 'error',
-            error: 'el usuario y la contraseña no coinciden.'
-        })
+            req.session.user = {
+                rol: 'user',
+                firts_name: req.user.first_name,
+                last_name: req.user.last_name,
+                email: req.user.email
+            }
 
-        // if(email == 'adminCoder@coder.com' && password == 'adminCod3r123'){
-        //     req.session.user = {
-        //         rol: 'admin',
-        //         firts_name: user.first_name,
-        //         last_name: user.last_name,
-        //         email: user.email
-        //     }
-        // }
-
-        req.session.user = {
-            rol: 'user',
-            firts_name: user.first_name,
-            last_name: user.last_name,
-            email: user.email
+            res.json({ status: 'success', message: 'Sesion iniciada' })
         }
+        catch (error) {
+            res.status(500).json({ status: 'error', error: 'El usuario no ha sido encontrado' })
 
-        res.json({ status: 'success', message: 'Sesion iniciada' })
-
-
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({ status: 'error', error: 'Internal server error' })
-
-    }
-})
+        }
+    })
 
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
@@ -52,6 +35,18 @@ router.get('/logout', (req, res) => {
         }
         res.redirect('/')
     })
+})
+
+router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), 
+async (req, res) => {
+
+})
+
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect : '/login' }), 
+async (req, res) => {
+    req.session.user = req.user
+    res.redirect('/products')
+
 })
 
 module.exports = router

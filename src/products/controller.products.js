@@ -2,7 +2,7 @@ const ProductManager = require("../dao/ProductManager")
 const tienda = new ProductManager('productos.json')
 const { Router } = require('express')
 const Products = require("../dao/models/products.model")
-
+const privateAccess = require("../middlewares/privateAccess.middlewares")
 
 const router = Router()
 
@@ -12,7 +12,7 @@ const opciones = {
 }
 
 
-router.post('/', async (req, res) => {
+router.post('/',  async (req, res) => {
     const product = req.body
     const { title, description, price, thumbnail, code, stock } = product
     const añadir = await tienda.addProduct({ title, description, price, thumbnail, code, stock })
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 })
 
 
-router.get('/', async (req, res) => {
+router.get('/', privateAccess ,  async (req, res) => {
     // res.send({message: "hola"})
     const { limit = 10, page = 1, sort, query } = req.query
     const limitValue = Number(limit)

@@ -23,19 +23,9 @@ const router = app => {
     app.use('/api/sessions', sessionController )
     app.use('/users', usersController)
     app.use('/auth', authController)
-    // app.get('/cookies',(req,res)=>{
-    //     res.cookie('CoderCookie','Esta es una cookie',{maxAge:1000, signed:true}).send('Cookie Creada')
-
-    // })
-
-    // app.get('/getcookies',(req,res)=>{
-    //     res.send(req.cookies)
 
 
-    // })
-    //Vista de /products 
-
-    app.get('/products', async (req, res) => {
+    app.get('/products', privateAccess ,  async (req, res) => {
         const { user } = req.session
         const { limit = 10, page = 1, sort, query } = req.query
         const limitValue = Number(limit)

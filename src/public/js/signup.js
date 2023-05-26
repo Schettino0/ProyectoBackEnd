@@ -18,11 +18,16 @@ form.addEventListener('submit', e => {
         method,
         body
     })
-    .then(response=>response.json())
-    .then(data=> console.log(data))
-    .catch(error=>console.log(error))
-    
-    
+        .then(response => response.json())
+        .then(data => {
+            if (data.status !== "error") {
+                window.location.href = 'http://localhost:8080/'
+            }
+            console.log(data)
+        })
+        .catch(error => console.log(error))
+
+
     form.reset()
-    
+
 })

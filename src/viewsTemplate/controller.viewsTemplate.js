@@ -15,8 +15,7 @@ router.get('/login', publicAccess, (req, res) => {
 
 router.get('/', privateAccess, (req, res) => {
     const { user } = req.session
-    console.log(user)
-    res.render('profile', { style: "../../css/profile.css", user })
+    res.redirect('/products')
 })
 
 

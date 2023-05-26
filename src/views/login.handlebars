@@ -1,11 +1,12 @@
 <form id="loginForm">
     <label for="email">Correo electrónico:</label>
-    <input type="email" id="email" name="email"><br>
+    <input type="email"  id="email" name="email"><br>
     <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password"><br>
+    <input type="password"  id="password" name="password"><br>
+    <h3 id="mensaje"></h3>
     <input type="submit" value="Iniciar Sesion">
-<button onclick="window.location='http://localhost:8080/signup'">Registrarse</button>
-
+    <button onclick="window.location='http://localhost:8080/signup'">Registrarse</button>
+    <button onclick="window.location='http://localhost:8080/auth/github'">Ingresar con GitHub</button>
 </form>
 
 <script src="/js/login.js"></script>
