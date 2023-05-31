@@ -10,7 +10,8 @@ const collectionSchema = new mongoose.Schema({
         unique:true
     },
     age: Number,
-    password: String
+    password: String,
+    googleId: String
 
 })
 

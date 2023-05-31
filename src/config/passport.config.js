@@ -4,6 +4,7 @@ const Users = require("../dao/models/users.model");
 const { createHash, isValidPassword } = require("../utils/cryptPassword.utils");
 const LocalStrategy = local.Strategy
 const GitHubStrategy = require('passport-github2')
+const GoogleStrategy = require('passport-google-oauth20')
 
 
 
@@ -55,6 +56,34 @@ const initializePassport = () => {
             const user = await Users.findOne({ email: profile._json.email })
             if (!user) {
                 const newUserInfo = {
+                    first_name: profile._json.name,
+                    last_name: "",
+                    age: 18,
+                    email: profile._json.email,
+                    password: ""
+                }
+                const newUser = await Users.create(newUserInfo)
+                return done(null, newUser)
+            }
+            done(null, user)
+        } catch (error) {
+
+        }
+    }
+    ));
+
+    passport.use('google', new GoogleStrategy({
+        clientID: "905277099426-so3gpib5889mtd4dt4r7189f78qc15fk.apps.googleusercontent.com",
+        clientSecret: "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",
+        callbackURL: "http://localhost:8080/auth/google/callback"
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            console.log(profile)
+            const user = await Users.findOne({ googleId: profile._json.sub})
+
+            if (!user) {
+                const newUserInfo = {
+                    googleId: profile._json.sub,
                     first_name: profile._json.name,
                     last_name: "",
                     age: 18,
